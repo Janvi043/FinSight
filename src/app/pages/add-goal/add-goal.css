@@ -1,0 +1,16 @@
+/* Styles for Add Goal component */
+
+/* Center the form and add subtle shadow */
+.max-w-md {
+  max-width: 28rem;
+}
+
+/* Ensure inputs have consistent spacing */
+input, select, textarea {
+  margin-bottom: 0.5rem;
+}
+
+/* Button hover effect */
+button:hover {
+  opacity: 0.9;
+}

@@ -1,0 +1,279 @@
+<div class="flex h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
+  
+  <!-- Sidebar -->
+  <app-sidebar #sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Top Navbar -->
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 z-10">
+      <div class="flex items-center">
+        <button (click)="sidebar.toggle()" class="md:hidden text-slate-500 hover:text-slate-700 p-2 -ml-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h1 class="text-xl font-semibold text-slate-800 hidden sm:block">Expense Management</h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Search -->
+        <div class="relative hidden sm:block text-slate-400 focus-within:text-cyan-500">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input type="text" class="block w-64 pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors sm:text-sm" placeholder="Search accounts...">
+        </div>
+        
+        <!-- Notifications -->
+        <button class="relative p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+          <span class="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-4 sm:p-6 lg:p-8">
+      
+      <!-- Top header / actions -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Transactions</h2>
+          <p class="text-slate-500 text-sm mt-1">Track expenses, income, and salary updates.</p>
+        </div>
+        <div class="flex gap-2">
+          <button
+            type="button"
+            (click)="toggleExpenseForm()"
+            class="bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2.5 px-4 rounded-xl shadow-lg shadow-cyan-500/30 transition-colors flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add Expense
+          </button>
+          <button
+            type="button"
+            (click)="toggleIncomeForm()"
+            class="bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-xl shadow-lg shadow-emerald-500/30 transition-colors flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add Income
+          </button>
+        </div>
+      </div>
+
+      <!-- Salary Update Card -->
+      <div class="mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p class="text-sm font-medium text-slate-500">Current Salary</p>
+            <h3 class="text-2xl font-bold text-slate-800">IND Rs {{ salary | number:'1.2-2' }}</h3>
+          </div>
+          <div class="flex gap-2">
+            <input
+              type="number"
+              [(ngModel)]="salaryDraft"
+              class="w-40 px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+              placeholder="Update salary"
+            >
+            <button type="button" (click)="updateSalary()" class="px-4 py-2.5 bg-slate-800 text-white rounded-lg text-sm font-medium">Update</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Expense Form -->
+      <div *ngIf="showExpenseForm" class="mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-slate-800 mb-4">Add New Expense</h3>
+        <form (ngSubmit)="addExpense()" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Source</label>
+            <input
+              type="text"
+              [(ngModel)]="newExpense.source"
+              name="expenseSource"
+              placeholder="BESCOM, Amazon, etc."
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Category</label>
+            <input
+              type="text"
+              [(ngModel)]="newExpense.category"
+              name="expenseCategory"
+              placeholder="Utilities, Shopping"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Amount</label>
+            <input
+              type="number"
+              min="0"
+              [(ngModel)]="newExpense.amount"
+              name="expenseAmount"
+              placeholder="0"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Date</label>
+            <input
+              type="date"
+              [(ngModel)]="newExpense.date"
+              name="expenseDate"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div class="md:col-span-4 flex justify-end gap-2">
+            <button type="button" (click)="toggleExpenseForm()" class="px-4 py-2.5 border border-slate-200 text-slate-600 rounded-lg text-sm font-medium">Cancel</button>
+            <button type="submit" class="px-4 py-2.5 bg-cyan-500 text-white rounded-lg text-sm font-medium">Save Expense</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Add Income Form -->
+      <div *ngIf="showIncomeForm" class="mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-slate-800 mb-4">Add New Income</h3>
+        <form (ngSubmit)="addIncome()" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Source</label>
+            <input
+              type="text"
+              [(ngModel)]="newIncome.source"
+              name="incomeSource"
+              placeholder="Salary, Bonus, Freelance"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Category</label>
+            <input
+              type="text"
+              [(ngModel)]="newIncome.category"
+              name="incomeCategory"
+              placeholder="Salary, Bonus"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Amount</label>
+            <input
+              type="number"
+              min="0"
+              [(ngModel)]="newIncome.amount"
+              name="incomeAmount"
+              placeholder="0"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-600 mb-1">Date</label>
+            <input
+              type="date"
+              [(ngModel)]="newIncome.date"
+              name="incomeDate"
+              class="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            >
+          </div>
+          <div class="md:col-span-4 flex justify-end gap-2">
+            <button type="button" (click)="toggleIncomeForm()" class="px-4 py-2.5 border border-slate-200 text-slate-600 rounded-lg text-sm font-medium">Cancel</button>
+            <button type="submit" class="px-4 py-2.5 bg-emerald-500 text-white rounded-lg text-sm font-medium">Save Income</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Summary Mini-Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500">Total Expenses</p>
+            <h3 class="text-xl font-bold text-slate-800">IND Rs {{ totalExpenses | number:'1.2-2' }}</h3>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500">Total Income</p>
+            <h3 class="text-xl font-bold text-slate-800">IND Rs {{ totalIncome | number:'1.2-2' }}</h3>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500">Net Balance</p>
+            <h3 class="text-xl font-bold text-slate-800">IND Rs {{ netBalance | number:'1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Income and Expense Sections -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <!-- Income Section -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+          <div class="px-6 py-4 border-b border-slate-100 bg-emerald-50/50">
+            <h3 class="text-lg font-semibold text-slate-800">Income</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider">
+                  <th class="px-6 py-4 font-medium">Source</th>
+                  <th class="px-6 py-4 font-medium">Category</th>
+                  <th class="px-6 py-4 font-medium">Date</th>
+                  <th class="px-6 py-4 font-medium text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-sm">
+                <ng-container *ngFor="let transaction of transactions">
+                  <tr *ngIf="transaction.type === 'income'" class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 font-medium text-slate-800">{{ transaction.source }}</td>
+                    <td class="px-6 py-4 text-slate-500">{{ transaction.category }}</td>
+                    <td class="px-6 py-4 text-slate-500">{{ transaction.date }}</td>
+                    <td class="px-6 py-4 text-right font-semibold text-emerald-600">+IND Rs {{ transaction.amount }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Expense Section -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+          <div class="px-6 py-4 border-b border-slate-100 bg-rose-50/50">
+            <h3 class="text-lg font-semibold text-slate-800">Expenses</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider">
+                  <th class="px-6 py-4 font-medium">Source</th>
+                  <th class="px-6 py-4 font-medium">Category</th>
+                  <th class="px-6 py-4 font-medium">Date</th>
+                  <th class="px-6 py-4 font-medium text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-sm">
+                <ng-container *ngFor="let transaction of transactions">
+                  <tr *ngIf="transaction.type === 'expense'" class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 font-medium text-slate-800">{{ transaction.source }}</td>
+                    <td class="px-6 py-4 text-slate-500">{{ transaction.category }}</td>
+                    <td class="px-6 py-4 text-slate-500">{{ transaction.date }}</td>
+                    <td class="px-6 py-4 text-right font-semibold text-slate-800">-IND Rs {{ transaction.amount }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+</div>

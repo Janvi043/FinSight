@@ -1,0 +1,357 @@
+<div class="flex h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
+  
+  <!-- Sidebar -->
+  <app-sidebar #sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Top Navbar -->
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 z-10">
+      <div class="flex items-center">
+        <button (click)="sidebar.toggle()" class="md:hidden text-slate-500 hover:text-slate-700 p-2 -ml-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h1 class="text-xl font-semibold text-slate-800 hidden sm:block">Financial Analytics</h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Search -->
+        <div class="relative hidden sm:block text-slate-400 focus-within:text-cyan-500">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input type="text" class="block w-64 pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors sm:text-sm" placeholder="Search insights...">
+        </div>
+        
+        <!-- Notifications -->
+        <button class="relative p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+          <span class="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-4 sm:p-6 lg:p-8">
+      
+      <!-- Top header / actions -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Behavioral Analytics</h2>
+          <p class="text-slate-500 text-sm mt-1">AI-powered insights into your spending patterns and anomalies.</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 font-medium py-2.5 px-4 rounded-xl shadow-sm transition-colors flex items-center gap-2">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Export Report
+          </button>
+          <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2.5 px-4 rounded-xl shadow-lg shadow-cyan-500/30 transition-colors flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            Sync Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Anomaly Alerts Section -->
+      <div class="mb-8 relative overflow-hidden bg-white/40 backdrop-blur-md rounded-2xl border shadow-sm p-1"
+           [ngClass]="hasAnomaly ? 'border-red-100' : 'border-emerald-100'">
+        <div [ngClass]="hasAnomaly ? 'from-red-50 to-orange-50 border-red-100/50' : 'from-emerald-50 to-teal-50 border-emerald-100/50'"
+             class="bg-gradient-to-r rounded-xl p-6 border">
+          <div class="flex items-start gap-4">
+            <div [ngClass]="hasAnomaly ? 'bg-red-100 border-red-200' : 'bg-emerald-100 border-emerald-200'"
+                 class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 shadow-inner border">
+              <svg *ngIf="hasAnomaly" class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <svg *ngIf="!hasAnomaly" class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div class="flex-1">
+              <h3 [ngClass]="hasAnomaly ? 'text-red-900' : 'text-emerald-900'" class="text-lg font-bold">{{ hasAnomaly ? 'Anomaly Detected' : 'All Clear' }}</h3>
+              <p [ngClass]="hasAnomaly ? 'text-red-800/80' : 'text-emerald-800/80'" class="text-sm mt-2 leading-relaxed">{{ anomalyText }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Analytics Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        
+        <!-- Left Column (Spans 2) -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Spending Segments -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h3 class="text-lg font-semibold text-slate-800">Spending Segments</h3>
+                <p class="text-xs text-slate-400">Monthly spending patterns</p>
+              </div>
+              <button class="text-cyan-600 text-sm font-medium hover:text-cyan-700">View Details</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Cluster 1 -->
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 hover:border-cyan-200 transition-colors cursor-pointer group">
+                <div class="flex justify-between items-start mb-3">
+                   <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h4 class="font-semibold text-slate-800">Weekend Entertainment</h4>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 mb-3">Higher spending during weekends, mainly on restaurants and entertainment.</p>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <p class="text-xs text-slate-400">Total Spent / Month</p>
+                    <p class="font-bold text-slate-800">IND Rs {{ entertainmentAvg | number:'1.2-2' }}</p>
+                  </div>
+                  <div [ngClass]="{
+                    'text-emerald-500': entChange < 0,
+                    'text-red-500': entChange > 0,
+                    'text-slate-400': entChange === 0
+                  }" class="text-xs font-medium flex items-center">
+                    <svg *ngIf="entChange < 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                    <svg *ngIf="entChange > 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    <svg *ngIf="entChange === 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    {{ entChange === 0 ? '' : (entChange > 0 ? '+' : '') }}{{ entChange | number:'1.0-0' }}%
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cluster 2 -->
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 hover:border-cyan-200 transition-colors cursor-pointer group">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    </div>
+                    <h4 class="font-semibold text-slate-800">Essential Utilities</h4>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 mb-3">Regular monthly bills with steady payment amounts.</p>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <p class="text-xs text-slate-400">Total Spent / Month</p>
+                    <p class="font-bold text-slate-800">IND Rs {{ utilitiesAvg | number:'1.2-2' }}</p>
+                  </div>
+                  <div [ngClass]="{
+                    'text-emerald-500': utilChange < 0,
+                    'text-red-500': utilChange > 0,
+                    'text-slate-400': utilChange === 0
+                  }" class="text-xs font-medium flex items-center">
+                    <svg *ngIf="utilChange < 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                    <svg *ngIf="utilChange > 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    <svg *ngIf="utilChange === 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    {{ utilChange === 0 ? '' : (utilChange > 0 ? '+' : '') }}{{ utilChange | number:'1.0-0' }}%
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cluster 3 -->
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 hover:border-cyan-200 transition-colors cursor-pointer group">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <h4 class="font-semibold text-slate-800">Housing & Rent</h4>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 mb-3">Fixed monthly housing rental payment and property expenses.</p>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <p class="text-xs text-slate-400">Total Spent / Month</p>
+                    <p class="font-bold text-slate-800">IND Rs {{ rentAvg | number:'1.2-2' }}</p>
+                  </div>
+                  <div [ngClass]="{
+                    'text-emerald-500': rentChange < 0,
+                    'text-red-500': rentChange > 0,
+                    'text-slate-400': rentChange === 0
+                  }" class="text-xs font-medium flex items-center">
+                    <svg *ngIf="rentChange < 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                    <svg *ngIf="rentChange > 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    <svg *ngIf="rentChange === 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    {{ rentChange === 0 ? '' : (rentChange > 0 ? '+' : '') }}{{ rentChange | number:'1.0-0' }}%
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cluster 4 -->
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 hover:border-cyan-200 transition-colors cursor-pointer group">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h4 class="font-semibold text-slate-800">Grocery & Pantry</h4>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 mb-3">Steady purchases with predictable amounts and a regular frequency.</p>
+                <div class="flex items-end justify-between">
+                  <div>
+                    <p class="text-xs text-slate-400">Total Spent / Month</p>
+                    <p class="font-bold text-slate-800">IND Rs {{ groceriesAvg | number:'1.2-2' }}</p>
+                  </div>
+                  <div [ngClass]="{
+                    'text-emerald-500': grocChange < 0,
+                    'text-red-500': grocChange > 0,
+                    'text-slate-400': grocChange === 0
+                  }" class="text-xs font-medium flex items-center">
+                    <svg *ngIf="grocChange < 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                    <svg *ngIf="grocChange > 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    <svg *ngIf="grocChange === 0" class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                    {{ grocChange === 0 ? '' : (grocChange > 0 ? '+' : '') }}{{ grocChange | number:'1.0-0' }}%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expense Distribution Section -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+            <h3 class="text-lg font-semibold text-slate-800 mb-6">Expense Distribution (Top Categories)</h3>
+            
+            <div class="flex flex-col md:flex-row items-center gap-8">
+              <!-- Pie Chart Placeholder -->
+              <div class="relative w-48 h-48 shrink-0">
+                <svg viewBox="0 0 36 36" class="w-full h-full drop-shadow-md">
+                  <!-- Rent -->
+                  <path *ngIf="categoriesPercentage.rent > 0" class="text-indigo-500" [attr.stroke-dasharray]="categoriesPercentage.rent + ', 100'" [attr.stroke-dashoffset]="categoriesOffset.rent" stroke="currentColor" stroke-width="6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <!-- Groceries -->
+                  <path *ngIf="categoriesPercentage.groceries > 0" class="text-amber-500" [attr.stroke-dasharray]="categoriesPercentage.groceries + ', 100'" [attr.stroke-dashoffset]="categoriesOffset.groceries" stroke="currentColor" stroke-width="6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <!-- Utilities -->
+                  <path *ngIf="categoriesPercentage.utilities > 0" class="text-cyan-400" [attr.stroke-dasharray]="categoriesPercentage.utilities + ', 100'" [attr.stroke-dashoffset]="categoriesOffset.utilities" stroke="currentColor" stroke-width="6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <!-- Entertainment -->
+                  <path *ngIf="categoriesPercentage.entertainment > 0" class="text-purple-500" [attr.stroke-dasharray]="categoriesPercentage.entertainment + ', 100'" [attr.stroke-dashoffset]="categoriesOffset.entertainment" stroke="currentColor" stroke-width="6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <!-- Travel -->
+                  <path *ngIf="categoriesPercentage.travel > 0" class="text-emerald-400" [attr.stroke-dasharray]="categoriesPercentage.travel + ', 100'" [attr.stroke-dashoffset]="categoriesOffset.travel" stroke="currentColor" stroke-width="6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <!-- Other -->
+                  <path *ngIf="categoriesPercentage.other > 0" class="text-slate-200" [attr.stroke-dasharray]="categoriesPercentage.other + ', 100'" [attr.stroke-dashoffset]="categoriesOffset.other" stroke="currentColor" stroke-width="6" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span class="text-xs text-slate-400 font-medium">TOTAL</span>
+                  <span class="text-xl font-bold text-slate-800">IND Rs {{ totalExpense | number:'1.2-2' }}</span>
+                </div>
+              </div>
+              
+              <!-- Legend / Details -->
+              <div class="flex-1 w-full space-y-4">
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-indigo-500"></div><span class="font-medium text-slate-700">Housing & Utilities</span></div>
+                    <span class="font-bold text-slate-800">{{ categoriesPercentage.rent + categoriesPercentage.utilities }}%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-indigo-500 h-1.5 rounded-full" [style.width.%]="categoriesPercentage.rent + categoriesPercentage.utilities"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-amber-500"></div><span class="font-medium text-slate-700">Groceries</span></div>
+                    <span class="font-bold text-slate-800">{{ categoriesPercentage.groceries }}%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-amber-500 h-1.5 rounded-full" [style.width.%]="categoriesPercentage.groceries"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-emerald-400"></div><span class="font-medium text-slate-700">Travel & Transportation</span></div>
+                    <span class="font-bold text-slate-800">{{ categoriesPercentage.travel }}%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-emerald-400 h-1.5 rounded-full" [style.width.%]="categoriesPercentage.travel"></div></div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-purple-500"></div><span class="font-medium text-slate-700">Entertainment</span></div>
+                    <span class="font-bold text-slate-800">{{ categoriesPercentage.entertainment }}%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-purple-500 h-1.5 rounded-full" [style.width.%]="categoriesPercentage.entertainment"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column (Spans 1) -->
+        <div class="space-y-8">
+          
+          <!-- AI Insights Panel -->
+          <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-950 rounded-2xl p-6 text-white shadow-lg shadow-cyan-900/10 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+            
+            <div class="relative z-10">
+              <div class="flex items-center gap-2 mb-4 text-cyan-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <h3 class="font-semibold text-lg">AI Spending Analysis</h3>
+              </div>
+              
+              <div class="space-y-4">
+                <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/10">
+                  <h4 class="text-sm font-semibold text-white mb-1">Anomaly Status</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed">{{ anomalyText }}</p>
+                </div>
+                <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/10">
+                  <h4 class="text-sm font-semibold text-white mb-1">Spending Recommendation</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed">{{ aiNote }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Trend Cards -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+            <h3 class="text-lg font-semibold text-slate-800 mb-4">Cash Flow Velocity</h3>
+            
+            <div class="space-y-6">
+              <div>
+                <div class="flex justify-between items-end mb-2">
+                  <div>
+                    <p class="text-xs font-medium text-slate-500">Inflow Rate (30d)</p>
+                    <p class="text-xl font-bold text-slate-800">IND Rs {{ totalIncome | number:'1.2-2' }}</p>
+                  </div>
+                  <div class="h-8 w-24 flex items-end gap-1">
+                     <div class="w-full bg-emerald-100 h-[40%] rounded-t-sm"></div>
+                     <div class="w-full bg-emerald-200 h-[50%] rounded-t-sm"></div>
+                     <div class="w-full bg-emerald-300 h-[65%] rounded-t-sm"></div>
+                     <div class="w-full bg-emerald-400 h-[80%] rounded-t-sm"></div>
+                     <div class="w-full bg-emerald-500 h-[100%] rounded-t-sm"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="w-full h-px bg-slate-100"></div>
+              
+              <div>
+                <div class="flex justify-between items-end mb-2">
+                  <div>
+                    <p class="text-xs font-medium text-slate-500">Outflow Rate (30d)</p>
+                    <p class="text-xl font-bold text-slate-800">IND Rs {{ totalExpense | number:'1.2-2' }}</p>
+                  </div>
+                  <div class="h-8 w-24 flex items-end gap-1">
+                     <div class="w-full bg-rose-200 h-[90%] rounded-t-sm"></div>
+                     <div class="w-full bg-rose-300 h-[70%] rounded-t-sm"></div>
+                     <div class="w-full bg-rose-400 h-[85%] rounded-t-sm"></div>
+                     <div class="w-full bg-rose-500 h-[60%] rounded-t-sm"></div>
+                     <div class="w-full bg-rose-600 h-[40%] rounded-t-sm"></div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- Quick Stat -->
+          <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-2xl border border-emerald-100 shadow-sm flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-emerald-800">Savings Rate</p>
+              <h3 class="text-3xl font-black text-emerald-600 mt-1">{{ savingsRate | number:'1.1-1' }}%</h3>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-emerald-200/50 flex items-center justify-center text-emerald-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+    </main>
+  </div>
+</div>

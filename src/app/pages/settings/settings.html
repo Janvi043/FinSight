@@ -1,0 +1,261 @@
+<div class="flex h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
+  
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Top Navbar -->
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 z-10">
+      <div class="flex items-center">
+        <button class="md:hidden text-slate-500 hover:text-slate-700 p-2 -ml-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h1 class="text-xl font-semibold text-slate-800 hidden sm:block">Account Settings</h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Notifications -->
+        <button class="relative p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+          <span class="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-4 sm:p-6 lg:p-8 relative">
+      
+      <div class="max-w-5xl mx-auto">
+        <!-- Top header / actions -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-800">Preferences & Security</h2>
+            <p class="text-slate-500 text-sm mt-1">Manage your account details and application settings.</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 font-medium py-2.5 px-4 rounded-xl shadow-sm transition-colors text-sm">
+              Discard Changes
+            </button>
+            <button type="button" (click)="saveProfile()" class="bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2.5 px-6 rounded-xl shadow-lg shadow-cyan-500/30 transition-colors flex items-center gap-2 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              Save Profile
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- Left Column (Profile & Preferences) -->
+          <div class="lg:col-span-2 space-y-8">
+            
+            <!-- User Information Section -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-[100px] -z-0"></div>
+              
+              <h3 class="text-lg font-semibold text-slate-800 mb-6 relative z-10">Profile Information</h3>
+              
+              <div class="flex flex-col sm:flex-row gap-8 relative z-10">
+                <div class="flex flex-col items-center gap-3">
+                  <div class="relative group">
+                    <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md" [src]="profile.avatarUrl" alt="User avatar">
+                    <button class="absolute bottom-0 right-0 bg-slate-900 text-white p-2 rounded-full shadow-lg hover:bg-slate-800 transition-colors border-2 border-white">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </button>
+                  </div>
+                  <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Pro Member</span>
+                </div>
+                
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div class="space-y-1">
+                    <label class="text-xs font-medium text-slate-500">First Name</label>
+                    <input type="text" [(ngModel)]="profile.firstName" name="firstName" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-colors">
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-xs font-medium text-slate-500">Last Name</label>
+                    <input type="text" [(ngModel)]="profile.lastName" name="lastName" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-colors">
+                  </div>
+                  <div class="space-y-1 sm:col-span-2">
+                    <label class="text-xs font-medium text-slate-500">Email Address</label>
+                    <input type="email" [(ngModel)]="profile.email" name="email" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-colors">
+                  </div>
+                  <div class="space-y-1 sm:col-span-2">
+                    <label class="text-xs font-medium text-slate-500">Phone Number</label>
+                    <input type="tel" [(ngModel)]="profile.phone" name="phone" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition-colors">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Display & UI Preferences -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <h3 class="text-lg font-semibold text-slate-800 mb-6">Display Preferences</h3>
+              
+              <div class="space-y-6">
+                <!-- Theme Toggle -->
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-semibold text-slate-800">Dark Mode</h4>
+                      <p class="text-xs text-slate-500">Switch to a dark UI for low-light environments</p>
+                    </div>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-500"></div>
+                  </label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label class="text-xs font-medium text-slate-500">Default Currency</label>
+                    <div class="relative">
+                      <select [(ngModel)]="profile.currency" name="currency" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 appearance-none">
+                        <option value="INR">INR - Indian Rupee (₹)</option>
+                        <option value="USD">USD - US Dollar ($)</option>
+                        <option value="EUR">EUR - Euro (€)</option>
+                        <option value="GBP">GBP - British Pound (£)</option>
+                      </select>
+                      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label class="text-xs font-medium text-slate-500">Language</label>
+                    <div class="relative">
+                      <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 appearance-none">
+                        <option value="en">English (US)</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                      </select>
+                      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column (Security & Notifications) -->
+          <div class="space-y-8">
+            
+            <!-- Security Settings -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+              <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-20"></div>
+              
+              <div class="relative z-10">
+                <h3 class="font-semibold text-lg mb-6 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                  Security
+                </h3>
+                
+                <div class="space-y-4">
+                  <div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm flex justify-between items-center">
+                    <div>
+                      <h4 class="text-sm font-semibold text-white">Password</h4>
+                      <p class="text-xs text-slate-400 mt-0.5">Last changed 3 months ago</p>
+                    </div>
+                    <button class="text-xs font-medium bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded transition-colors">Update</button>
+                  </div>
+                  
+                  <div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm flex justify-between items-center">
+                    <div>
+                      <h4 class="text-sm font-semibold text-white">Two-Factor Auth</h4>
+                      <p class="text-xs text-slate-400 mt-0.5">Protect account with SMS/App</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" value="" class="sr-only peer" checked>
+                      <div class="w-9 h-5 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notification Preferences -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <h3 class="text-lg font-semibold text-slate-800 mb-4">Notifications</h3>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div>
+                    <h4 class="text-sm font-medium text-slate-800">Email Summaries</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Weekly financial reports</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer" checked>
+                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div>
+                    <h4 class="text-sm font-medium text-slate-800">Anomaly Alerts</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Get notified of unusual spending</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer" checked>
+                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h4 class="text-sm font-medium text-slate-800">Marketing & Offers</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">New feature announcements</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer">
+                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-cyan-500"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connected Devices -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <h3 class="text-lg font-semibold text-slate-800 mb-4">Connected Devices</h3>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-slate-800">MacBook Pro 16"</p>
+                      <p class="text-xs text-emerald-500 font-medium">Active now • San Francisco, CA</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-slate-800">iPhone 14 Pro</p>
+                      <p class="text-xs text-slate-400">Last active 2 hrs ago</p>
+                    </div>
+                  </div>
+                  <button class="text-xs font-medium text-slate-400 hover:text-red-500 transition-colors">Revoke</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+</div>

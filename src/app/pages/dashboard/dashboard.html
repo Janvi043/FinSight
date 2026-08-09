@@ -1,0 +1,264 @@
+<div class="flex h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
+  
+  <!-- Sidebar -->
+  <app-sidebar #sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Top Navbar -->
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 z-10">
+      <div class="flex items-center">
+        <button (click)="sidebar.toggle()" class="md:hidden text-slate-500 hover:text-slate-700 p-2 -ml-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h1 class="text-xl font-semibold text-slate-800 hidden sm:block">Welcome back, {{ welcomeName }}</h1>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Search -->
+        <div class="relative hidden sm:block text-slate-400 focus-within:text-cyan-500">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input type="text" class="block w-64 pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors sm:text-sm" placeholder="Search transactions...">
+        </div>
+        
+        <!-- Notifications -->
+        <button class="relative p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+          <span class="absolute top-1.5 right-1.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-4 sm:p-6 lg:p-8">
+      
+      <!-- 4 Financial Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Total Balance</p>
+              <h3 class="text-2xl font-bold text-slate-800 mt-1">IND Rs {{ balance | number:'1.2-2' }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+            <span class="text-emerald-500 font-medium flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              +2.5%
+            </span>
+            <span class="text-slate-400 ml-2">from last month</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Total Spending</p>
+              <h3 class="text-2xl font-bold text-slate-800 mt-1">IND Rs {{ spending | number:'1.2-2' }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+            <span class="text-rose-500 font-medium flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+              +12.3%
+            </span>
+            <span class="text-slate-400 ml-2">from last month</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Total Savings</p>
+              <h3 class="text-2xl font-bold text-slate-800 mt-1">IND Rs {{ savings | number:'1.2-2' }}</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+            <span class="text-emerald-500 font-medium flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              +8.1%
+            </span>
+            <span class="text-slate-400 ml-2">from last month</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Portfolio Yield</p>
+              <h3 class="text-2xl font-bold text-slate-800 mt-1">+{{ portfolioYield | number:'1.1-1' }}%</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center text-sm">
+            <span class="text-emerald-500 font-medium flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              +1.2%
+            </span>
+            <span class="text-slate-400 ml-2">from last month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Middle Column (Spans 2) -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- Expense & Savings Charts Area (Mocked with layout) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Expense Analytics -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-slate-800">Expense Analytics</h3>
+                <button class="text-slate-400 hover:text-slate-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg></button>
+              </div>
+              <div class="h-48 flex items-end gap-2 justify-between mt-6">
+                <!-- Bar chart dynamic -->
+                <div *ngFor="let item of weeklyExpenses" 
+                     class="w-full bg-blue-100 hover:bg-blue-200 transition-colors relative group rounded-t-md"
+                     [ngClass]="{'bg-cyan-400 hover:bg-cyan-500': item.heightPercent > 80}"
+                     [style.height.%]="item.heightPercent">
+                  <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">₹{{ item.amount | number:'1.0-0' }}</span>
+                </div>
+              </div>
+              <div class="flex justify-between mt-2 text-xs text-slate-400">
+                <span *ngFor="let item of weeklyExpenses">{{ item.day }}</span>
+              </div>
+            </div>
+
+            <!-- Savings Overview -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-slate-800">Savings Goals</h3>
+                <button class="text-cyan-600 text-sm font-medium hover:text-cyan-700 mr-2" (click)="router.navigate(['/add-goal'])">Add Goal</button>
+                <button class="text-cyan-600 text-sm font-medium hover:text-cyan-700" (click)="router.navigate(['/goals'])">View All</button>
+              </div>
+              <div class="flex-1 space-y-5 mt-2">
+                <div *ngFor="let goal of savingsGoals">
+                  <div class="flex justify-between text-sm mb-2">
+                    <span class="font-medium text-slate-700">{{ goal.name }}</span>
+                    <span class="text-slate-500">₹{{ goal.achieved | number:'1.0-0' }} / ₹{{ goal.target | number:'1.0-0' }}</span>
+                  </div>
+                  <div class="w-full bg-slate-100 rounded-full h-2">
+                    <div class="h-2 rounded-full" [ngClass]="goal.colorClass" [style.width.%]="goal.percentage"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Transactions -->
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+              <h3 class="text-lg font-semibold text-slate-800">Recent Transactions</h3>
+              <button class="text-slate-400 hover:text-slate-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg></button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                    <th class="px-6 py-4 font-medium">Transaction</th>
+                    <th class="px-6 py-4 font-medium">Date</th>
+                    <th class="px-6 py-4 font-medium">Status</th>
+                    <th class="px-6 py-4 font-medium text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                  <tr *ngFor="let tx of recentTransactions" class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full flex items-center justify-center" 
+                           [ngClass]="{
+                             'bg-orange-100 text-orange-600': tx.category === 'Groceries' || tx.category === 'Shopping',
+                             'bg-blue-100 text-blue-600': tx.type === 'income',
+                             'bg-purple-100 text-purple-600': tx.category === 'Entertainment',
+                             'bg-red-100 text-red-600': tx.category === 'Rent',
+                             'bg-cyan-100 text-cyan-600': tx.category === 'Utilities' || tx.category === 'Travel' || tx.category === 'Healthcare'
+                           }">
+                        <svg *ngIf="tx.type === 'income'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <svg *ngIf="tx.type === 'expense'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <p class="font-medium text-slate-800">{{ tx.source || tx.description || tx.category }}</p>
+                        <p class="text-xs text-slate-400">{{ tx.category }}</p>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 text-slate-500">{{ tx.transaction_date | date:'MMM d, yyyy' }}</td>
+                    <td class="px-6 py-4">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Completed</span>
+                    </td>
+                    <td class="px-6 py-4 text-right font-medium" 
+                        [ngClass]="tx.type === 'income' ? 'text-emerald-600' : 'text-slate-800'">
+                      {{ tx.type === 'income' ? '+' : '-' }}₹{{ tx.amount | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                  <tr *ngIf="recentTransactions.length === 0">
+                    <td colspan="4" class="px-6 py-8 text-center text-slate-400">
+                      No recent transactions found.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column (Spans 1) -->
+        <div class="space-y-8">
+          
+          <!-- AI Insights Card -->
+          <div class="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl p-6 text-white shadow-lg shadow-indigo-900/20 relative overflow-hidden">
+            <!-- Decorative blur -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+            
+            <div class="relative z-10">
+              <div class="flex items-center gap-2 mb-4 text-cyan-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <h3 class="font-semibold text-lg">FinSight AI Analysis</h3>
+              </div>
+              <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                Based on your recent spending habits, you are projected to save <span class="font-bold text-white">₹450 more</span> than last month. 
+                Consider moving ₹300 to your high-yield savings to maximize returns.
+              </p>
+              <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/10">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm font-medium">Action Recommended</span>
+                  <span class="bg-cyan-500/20 text-cyan-300 text-xs px-2 py-1 rounded-full border border-cyan-500/30">High ROI</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">Transfer excess liquidity to S&P 500 Index Fund.</p>
+                <button class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold py-2 rounded-lg transition-colors text-sm shadow-lg shadow-cyan-500/25">
+                  Execute Transfer
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+    </main>
+  </div>
+</div>
